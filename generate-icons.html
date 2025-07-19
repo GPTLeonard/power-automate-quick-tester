@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Extension Icons</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+        .icon-container { display: inline-block; text-align: center; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Power Automate Quick-Tester Icons</h1>
+    <p>Klik met rechts op elk icoon en kies "Afbeelding opslaan als..." om de PNG-bestanden te maken:</p>
+    
+    <div class="icon-container">
+        <canvas id="icon16" width="16" height="16"></canvas>
+        <p>icon16.png</p>
+    </div>
+    
+    <div class="icon-container">
+        <canvas id="icon32" width="32" height="32"></canvas>
+        <p>icon32.png</p>
+    </div>
+    
+    <div class="icon-container">
+        <canvas id="icon48" width="48" height="48"></canvas>
+        <p>icon48.png</p>
+    </div>
+    
+    <div class="icon-container">
+        <canvas id="icon128" width="128" height="128"></canvas>
+        <p>icon128.png</p>
+    </div>
+
+    <script>
+        function drawIcon(canvas) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            
+            // Background circle
+            ctx.fillStyle = '#4285f4';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size/2 - 2, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Border
+            ctx.strokeStyle = '#1a73e8';
+            ctx.lineWidth = Math.max(1, size/32);
+            ctx.stroke();
+            
+            // Play triangle
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            const triangleSize = size * 0.4;
+            ctx.moveTo(size/2 - triangleSize/3, size/2 - triangleSize/2);
+            ctx.lineTo(size/2 - triangleSize/3, size/2 + triangleSize/2);
+            ctx.lineTo(size/2 + triangleSize*2/3, size/2);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // Draw all icons
+        ['icon16', 'icon32', 'icon48', 'icon128'].forEach(id => {
+            drawIcon(document.getElementById(id));
+        });
+    </script>
+</body>
+</html>
