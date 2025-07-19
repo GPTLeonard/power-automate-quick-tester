@@ -1,42 +1,109 @@
-# Power Automate Quick-Tester Chrome Extension
+# Power Automate Test Automation Extensions
 
-Automatiseert het testen van Power Automate flows met één klik!
+Automatiseer de 5-klik workflow in Power Automate met één klik! Beschikbaar voor zowel **Chrome** als **Firefox**.
 
-## Installatie
+## 🚀 Snel Starten
 
-### Optie 1: Lokale installatie (voor ontwikkeling)
-1. Download of clone deze extensie
-2. Open Chrome en ga naar `chrome://extensions/`
-3. Schakel "Developer mode" in (rechtsboven)
-4. Klik op "Load unpacked" en selecteer de map met de extensie
-5. Pin het icoon aan je toolbar
+### Chrome Extension
+- **Installatie**: [Chrome Web Store](https://chrome.google.com/webstore) (binnenkort beschikbaar)
+- **Direct gebruik**: Klik op het icoon in de toolbar → "Start Automation"
 
-### Optie 2: Chrome Web Store (toekomstig)
-- Binnenkort beschikbaar in de Chrome Web Store
+### Firefox Add-on
+- **Installatie**: [Firefox Add-ons](https://addons.mozilla.org) (binnenkort beschikbaar)  
+- **Direct gebruik**: Klik op het icoon in de toolbar voor directe activatie
 
-## Gebruik
-1. Ga naar een Power Automate flow op `https://make.powerautomate.com`
-2. Klik op het extensie-icoon in de toolbar
-3. De extensie voert automatisch uit:
-   - Klikt op "Test" (rechtsboven)
-   - Selecteert "Manually"
-   - Klikt op "Save & Test" of "Test"
-   - Klikt op "Run flow"
-   - Klikt op "Done"
+## 📁 Project Structuur
 
-## Bestanden in deze extensie
-- `manifest.json` - Configuratie van de extensie
-- `service_worker.js` - Achtergrondscript voor het injecteren van de automatisering
-- `auto_run.js` - Het script dat de klikken uitvoert
-- `icon*.png` - Icoontjes voor de extensie
+```
+Power-Automate-Automation/
+├── Chrome/           # Chrome Extension (Manifest V3)
+├── Firefox/          # Firefox Add-on (Manifest V2)
+├── README.md         # Deze algemene README
+└── INSTALL.md        # Gedetailleerde installatie-instructies
+```
 
-## Problemen oplossen
-- Controleer of je op de juiste Power Automate pagina zit (make.powerautomate.com)
-- Open de browser console (F12) om foutmeldingen te zien
-- Herlaad de pagina en probeer opnieuw
+## ⚡ Automatisatie Workflow
 
-## Veiligheid
-Deze extensie heeft minimale rechten:
-- Alleen toegang tot make.powerautomate.com
-- Geen toegang tot persoonlijke gegevens
-- Geen externe verbindingen
+De extensie automatiseert deze 5 stappen:
+1. **Test** knop detecteren
+2. **Manually** optie selecteren
+3. **Save & Test** of **Test** knop klikken
+4. **Run flow** bevestigen
+5. **Done** afronden
+
+## 🎯 Features
+
+| Feature | Chrome | Firefox |
+|---------|--------|---------|
+| **Manifest versie** | V3 | V2 |
+| **Installatie** | Chrome Web Store | Firefox Add-ons |
+| **Activatie** | Via popup | Directe klik |
+| **Websites** | make.powerautomate.com, flow.microsoft.com | make.powerautomate.com, flow.microsoft.com |
+| **Detectie snelheid** | 100ms | 100ms |
+| **Parallel detectie** | ✅ | ✅ |
+
+## 🔧 Installatie voor Ontwikkelaars
+
+### Chrome Extension
+```bash
+# Chrome-extensie laden
+1. Ga naar chrome://extensions/
+2. Zet "Ontwikkelaarsmodus" aan
+3. Klik "Uitgebreid laden" → selecteer de Chrome/ map
+```
+
+### Firefox Add-on
+```bash
+# Firefox add-on laden
+1. Ga naar about:debugging
+2. Klik "Deze Firefox"
+3. Klik "Tijdelijke add-on laden" → selecteer Firefox/manifest.json
+```
+
+## 🛠️ Technische Details
+
+### Browser Compatibility
+- **Chrome**: Manifest V3 met service workers
+- **Firefox**: Manifest V2 met background scripts
+- **Detectie**: Promise.race() voor optimale prestaties (100ms)
+
+### Bestandsstructuur
+```
+Chrome/
+├── manifest.json      # Chrome Manifest V3
+├── service_worker.js  # Service worker
+├── auto_run.js        # Content script
+└── popup.html         # Popup interface
+
+Firefox/
+├── manifest.json      # Firefox Manifest V2
+├── background.js      # Background script
+├── firefox-content.js # Content script
+└── README.md          # Firefox-specifieke instructies
+```
+
+## 📋 Vereisten
+
+- **Chrome**: Versie 88+ (voor Manifest V3 support)
+- **Firefox**: Versie 109+ (voor moderne API's)
+
+## 🤝 Bijdragen
+
+1. Fork dit project
+2. Maak een feature branch
+3. Commit je wijzigingen
+4. Push naar de branch
+5. Open een Pull Request
+
+## 📄 Licentie
+
+MIT License - zie [LICENSE](LICENSE) voor details.
+
+## 🆘 Ondersteuning
+
+- **Issues**: [GitHub Issues](https://github.com/jouwnaam/power-automate-automation/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/jouwnaam/power-automate-automation/discussions)
+
+---
+
+**Gemaakt met ❤️ voor Power Automate gebruikers**
