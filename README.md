@@ -8,7 +8,8 @@ Automatiseer de 5-klik workflow in Power Automate met één klik! Beschikbaar vo
 - **Installatie**: [Chrome Web Store](https://chrome.google.com/webstore) (binnenkort beschikbaar)
 - **Direct gebruik**: Klik op het icoon in de toolbar → "Start Automation"
 
-### Firefox Add-on
+### Firefox Add-on (Beta)
+- **Status**: ⚠️ **In ontwikkeling - nog niet getest**
 - **Installatie**: [Firefox Add-ons](https://addons.mozilla.org) (binnenkort beschikbaar)  
 - **Direct gebruik**: Klik op het icoon in de toolbar voor directe activatie
 
@@ -16,8 +17,8 @@ Automatiseer de 5-klik workflow in Power Automate met één klik! Beschikbaar vo
 
 ```
 Power-Automate-Automation/
-├── Chrome/           # Chrome Extension (Manifest V3)
-├── Firefox/          # Firefox Add-on (Manifest V2)
+├── Chrome/           # Chrome Extension (Manifest V3) ✅ Voltooid
+├── Firefox (beta)/   # Firefox Add-on (Manifest V2) ⚠️ In ontwikkeling
 ├── README.md         # Deze algemene README
 └── INSTALL.md        # Gedetailleerde installatie-instructies
 ```
@@ -33,14 +34,15 @@ De extensie automatiseert deze 5 stappen:
 
 ## 🎯 Features
 
-| Feature | Chrome | Firefox |
-|---------|--------|---------|
+| Feature | Chrome | Firefox (Beta) |
+|---------|--------|----------------|
+| **Status** | ✅ **Voltooid** | ⚠️ **In ontwikkeling** |
 | **Manifest versie** | V3 | V2 |
 | **Installatie** | Chrome Web Store | Firefox Add-ons |
 | **Activatie** | Via popup | Directe klik |
 | **Websites** | make.powerautomate.com, flow.microsoft.com | make.powerautomate.com, flow.microsoft.com |
-| **Detectie snelheid** | 100ms | 100ms |
-| **Parallel detectie** | ✅ | ✅ |
+| **Detectie snelheid** | 100ms | 100ms (theoretisch) |
+| **Parallel detectie** | ✅ | ✅ (theoretisch) |
 
 ## 🔧 Installatie voor Ontwikkelaars
 
@@ -52,12 +54,13 @@ De extensie automatiseert deze 5 stappen:
 3. Klik "Uitgebreid laden" → selecteer de Chrome/ map
 ```
 
-### Firefox Add-on
+### Firefox Add-on (Beta)
 ```bash
-# Firefox add-on laden
+# Firefox add-on laden (voor testdoeleinden)
 1. Ga naar about:debugging
 2. Klik "Deze Firefox"
-3. Klik "Tijdelijke add-on laden" → selecteer Firefox/manifest.json
+3. Klik "Tijdelijke add-on laden" → selecteer 'Firefox (beta)'/manifest.json
+⚠️ Let op: Nog niet volledig getest!
 ```
 
 ## 🛠️ Technische Details
@@ -75,7 +78,7 @@ Chrome/
 ├── auto_run.js        # Content script
 └── popup.html         # Popup interface
 
-Firefox/
+Firefox (beta)/
 ├── manifest.json      # Firefox Manifest V2
 ├── background.js      # Background script
 ├── firefox-content.js # Content script
