@@ -2,16 +2,13 @@
 
 Automatiseer de 5-klik workflow in Power Automate met één klik! Beschikbaar voor zowel **Chrome** als **Firefox**.
 
-## 🚀 Snel Starten
+## 🚀 Direct Downloaden
 
 ### Chrome Extension
-- **Installatie**: [Chrome Web Store](https://chrome.google.com/webstore) (binnenkort beschikbaar)
-- **Direct gebruik**: Klik op het icoon in de toolbar → "Start Automation"
+📥 **[Download Chrome Extension](https://github.com/GPTLeonard/power-automate-quick-tester/archive/refs/heads/main/Chrome.zip)**
 
 ### Firefox Add-on (Beta)
-- **Status**: ⚠️ **In ontwikkeling - nog niet getest**
-- **Installatie**: [Firefox Add-ons](https://addons.mozilla.org) (binnenkort beschikbaar)  
-- **Direct gebruik**: Klik op het icoon in de toolbar voor directe activatie
+📥 **[Download Firefox Add-on (Beta)](https://github.com/GPTLeonard/power-automate-quick-tester/archive/refs/heads/main/Firefox%20%28beta%29.zip)**
 
 ## 📁 Project Structuur
 
@@ -38,30 +35,25 @@ De extensie automatiseert deze 5 stappen:
 |---------|--------|----------------|
 | **Status** | ✅ **Voltooid** | ⚠️ **In ontwikkeling** |
 | **Manifest versie** | V3 | V2 |
-| **Installatie** | Chrome Web Store | Firefox Add-ons |
 | **Activatie** | Via popup | Directe klik |
 | **Websites** | make.powerautomate.com, flow.microsoft.com | make.powerautomate.com, flow.microsoft.com |
 | **Detectie snelheid** | 100ms | 100ms (theoretisch) |
 | **Parallel detectie** | ✅ | ✅ (theoretisch) |
 
-## 🔧 Installatie voor Ontwikkelaars
+## 🔧 Installatie na Download
 
 ### Chrome Extension
-```bash
-# Chrome-extensie laden
-1. Ga naar chrome://extensions/
-2. Zet "Ontwikkelaarsmodus" aan
-3. Klik "Uitgebreid laden" → selecteer de Chrome/ map
-```
+1. Download: [Chrome Extension](https://github.com/GPTLeonard/power-automate-quick-tester/archive/refs/heads/main/Chrome.zip)
+2. Pak uit en ga naar `chrome://extensions/`
+3. Zet "Ontwikkelaarsmodus" aan
+4. Klik "Uitgebreid laden" → selecteer de uitgepakte Chrome/ map
 
 ### Firefox Add-on (Beta)
-```bash
-# Firefox add-on laden (voor testdoeleinden)
-1. Ga naar about:debugging
-2. Klik "Deze Firefox"
-3. Klik "Tijdelijke add-on laden" → selecteer 'Firefox (beta)'/manifest.json
+1. Download: [Firefox Add-on (Beta)](https://github.com/GPTLeonard/power-automate-quick-tester/archive/refs/heads/main/Firefox%20%28beta%29.zip)
+2. Pak uit en ga naar `about:debugging`
+3. Klik "Deze Firefox"
+4. Klik "Tijdelijke add-on laden" → selecteer uitgepakte 'Firefox (beta)'/manifest.json
 ⚠️ Let op: Nog niet volledig getest!
-```
 
 ## 🛠️ Technische Details
 
@@ -104,8 +96,8 @@ MIT License - zie [LICENSE](LICENSE) voor details.
 
 ## 🆘 Ondersteuning
 
-- **Issues**: [GitHub Issues](https://github.com/jouwnaam/power-automate-automation/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/jouwnaam/power-automate-automation/discussions)
+- **Issues**: [GitHub Issues](https://github.com/GPTLeonard/power-automate-quick-tester/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/GPTLeonard/power-automate-quick-tester/discussions)
 
 ---
 
