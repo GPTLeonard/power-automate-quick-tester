@@ -124,14 +124,25 @@ async function clickManuallyOption() {
     
     // After clicking Manually, wait for the new button in the footer panel
     let clickedButton = null;
+    
+    // Use faster detection with shorter timeout for both buttons
     try {
-      // First try Save & Test (when not saved yet)
-      clickedButton = await findFooterButtonByText('Save & Test', 10000);
-      console.log('✅ Found Save & Test button');
+      // Check for both buttons simultaneously with shorter timeout
+      clickedButton = await Promise.race([
+        findFooterButtonByText('Save & Test', 2000),
+        findFooterButtonByText('Test', 2000)
+      ]);
+      console.log(`✅ Found button: ${clickedButton.textContent.trim()}`);
     } catch (e) {
-      // Then try Test (when already saved)
-      clickedButton = await findFooterButtonByText('Test', 10000);
-      console.log('✅ Found Test button');
+      // If both fail, try again with longer timeout for whichever appears
+      console.log('🔄 First attempt failed, trying longer timeout...');
+      try {
+        clickedButton = await findFooterButtonByText('Save & Test', 5000);
+        console.log('✅ Found Save & Test button (retry)');
+      } catch (e2) {
+        clickedButton = await findFooterButtonByText('Test', 5000);
+        console.log('✅ Found Test button (retry)');
+      }
     }
     
     if (clickedButton) {
