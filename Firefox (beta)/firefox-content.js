@@ -155,6 +155,10 @@ async function clickAutomaticallyOption() {
       if (label) {
         console.log('🦊 Clicking Automatically option');
         label.click();
+        const input = label.querySelector('input[type="radio"]');
+        if (input && !input.checked) {
+          input.click();
+        }
         resolve(label);
         return;
       }
@@ -171,38 +175,101 @@ async function clickAutomaticallyOption() {
   });
 }
 
-async function selectMostRecentAutomaticTrigger() {
+async function clickRecentTriggerModeOption() {
   return new Promise((resolve, reject) => {
     const startTime = Date.now();
-    const headerText = normalizeText('With a recently used trigger');
 
     const check = () => {
-      const containers = document.querySelectorAll('div, section');
-      for (const container of containers) {
-        if (!isVisible(container)) {
-          continue;
+      const label = findLabelByText('With a recently used trigger');
+      if (label) {
+        console.log('🦊 Selecting "With a recently used trigger" option');
+        label.click();
+        const input = label.querySelector('input[type="radio"]');
+        if (input && !input.checked) {
+          input.click();
         }
-        const text = normalizeText(container.textContent);
-        if (!text.includes(headerText)) {
-          continue;
-        }
+        resolve(label);
+        return;
+      }
 
-        const candidates = container.querySelectorAll('label, [role="radio"], button, [role="option"], [role="listitem"]');
-        for (const candidate of candidates) {
-          if (!isVisible(candidate)) {
-            continue;
-          }
+      if (Date.now() - startTime > 5000) {
+        reject(new Error('Recently used trigger option not found'));
+        return;
+      }
 
-          const candidateText = normalizeText(candidate.textContent);
-          if (!candidateText || candidateText === headerText) {
-            continue;
-          }
+      setTimeout(check, 100);
+    };
 
-          console.log(`🦊 Selecting recent trigger option: ${candidate.textContent.trim()}`);
-          candidate.click();
-          resolve(candidate);
-          return;
-        }
+    check();
+  });
+}
+
+function findRecentTriggerCandidates(scope) {
+  const selectors = ['label', '[role="radio"]', '[role="option"]', '[role="listitem"]', 'button'];
+  const elements = new Set();
+
+  for (const selector of selectors) {
+    for (const element of scope.querySelectorAll(selector)) {
+      elements.add(element);
+    }
+  }
+
+  const headerText = normalizeText('With a recently used trigger');
+
+  return Array.from(elements).filter((element) => {
+    if (!isVisible(element)) {
+      return false;
+    }
+
+    const text = normalizeText(element.textContent);
+    if (!text) {
+      return false;
+    }
+
+    if (text === headerText || text === normalizeText('Automatically') || text === normalizeText('Manually')) {
+      return false;
+    }
+
+    if (text.includes('skip to main content')) {
+      return false;
+    }
+
+    // Prefer trigger entries that include execution status information
+    if (/(test\s+succeeded|test\s+failed|succeeded|minutes? ago|hours? ago|seconds? ago|just now)/.test(text)) {
+      return true;
+    }
+
+    return false;
+  });
+}
+
+function findCandidateContainer(label) {
+  let current = label.parentElement;
+  while (current && current !== document.body) {
+    const candidateLabels = current.querySelectorAll('label');
+    if (candidateLabels.length > 1) {
+      return current;
+    }
+    current = current.parentElement;
+  }
+  return document.body;
+}
+
+async function selectMostRecentAutomaticTrigger() {
+  const modeLabel = await clickRecentTriggerModeOption();
+  const container = findCandidateContainer(modeLabel);
+
+  return new Promise((resolve, reject) => {
+    const startTime = Date.now();
+
+    const check = () => {
+      const candidates = findRecentTriggerCandidates(container);
+      if (candidates.length > 0) {
+        const candidate = candidates[0];
+        console.log(`🦊 Selecting recent trigger option: ${candidate.textContent.trim()}`);
+        candidate.click();
+        resolve(candidate);
+        return;
       }
 
       if (Date.now() - startTime > 7000) {
