@@ -3,6 +3,10 @@
 
 console.log('🚀 Power Automate automation started...');
 
+function normalizeText(text) {
+  return text ? text.replace(/\s+/g, ' ').trim().toLowerCase() : '';
+}
+
 // Smart wait function that checks for enabled state
 function waitForEnabled(selector, timeout = 30000) {
   return new Promise((resolve, reject) => {
@@ -31,18 +35,21 @@ function waitForEnabled(selector, timeout = 30000) {
 async function findFooterButtonByText(text, timeout = 30000) {
   return new Promise((resolve, reject) => {
     const startTime = Date.now();
-    
+    const normalizedTarget = normalizeText(text);
+
     const check = () => {
       // Look specifically in footer buttons
       const footerButtons = document.querySelectorAll('.ba-Panel-footerButton, [class*="footerButton"]');
-      
+
       for (const button of footerButtons) {
         if (button.offsetParent !== null && !button.disabled && !button.hasAttribute('aria-disabled')) {
           const labelSpan = button.querySelector('span[class*="label-"]');
-          const buttonText = labelSpan ? labelSpan.textContent.trim() : button.textContent.trim();
-          
-          if (buttonText === text) {
-            console.log(`🎯 Found footer button: ${text}`);
+          const buttonTextRaw = labelSpan ? labelSpan.textContent : button.textContent;
+          const buttonText = normalizeText(buttonTextRaw);
+          const ariaLabel = normalizeText(button.getAttribute('aria-label'));
+
+          if (buttonText === normalizedTarget || buttonText.includes(normalizedTarget) || ariaLabel === normalizedTarget) {
+            console.log(`🎯 Found footer button: ${buttonTextRaw ? buttonTextRaw.trim() : text}`);
             resolve(button);
             return;
           }
@@ -54,10 +61,12 @@ async function findFooterButtonByText(text, timeout = 30000) {
       for (const button of allButtons) {
         if (button.offsetParent !== null && !button.disabled && !button.hasAttribute('aria-disabled')) {
           const labelSpan = button.querySelector('span[class*="label-"]');
-          const buttonText = labelSpan ? labelSpan.textContent.trim() : button.textContent.trim();
-          
-          if (buttonText === text) {
-            console.log(`🎯 Found button: ${text}`);
+          const buttonTextRaw = labelSpan ? labelSpan.textContent : button.textContent;
+          const buttonText = normalizeText(buttonTextRaw);
+          const ariaLabel = normalizeText(button.getAttribute('aria-label'));
+
+          if (buttonText === normalizedTarget || buttonText.includes(normalizedTarget) || ariaLabel === normalizedTarget) {
+            console.log(`🎯 Found button: ${buttonTextRaw ? buttonTextRaw.trim() : text}`);
             resolve(button);
             return;
           }
@@ -77,21 +86,45 @@ async function findFooterButtonByText(text, timeout = 30000) {
 }
 
 // Find Manually option
+function isVisible(element) {
+  if (!element) {
+    return false;
+  }
+  if (element.offsetParent !== null) {
+    return true;
+  }
+  const style = window.getComputedStyle(element);
+  return style && style.position === 'fixed' && style.visibility !== 'hidden' && style.display !== 'none';
+}
+
+function findLabelByText(text) {
+  const normalizedTarget = normalizeText(text);
+  const labels = document.querySelectorAll('label');
+  for (const label of labels) {
+    if (!isVisible(label)) {
+      continue;
+    }
+    const labelText = normalizeText(label.textContent);
+    if (labelText.includes(normalizedTarget)) {
+      return label;
+    }
+  }
+  return null;
+}
+
 async function clickManuallyOption() {
   return new Promise((resolve, reject) => {
     const startTime = Date.now();
-    
+
     const check = () => {
-      const labels = document.querySelectorAll('label');
-      for (const label of labels) {
-        if (label.textContent.includes('Manually') && label.offsetParent !== null) {
-          console.log('✅ Clicking Manually option');
-          label.click();
-          resolve(label);
-          return;
-        }
+      const label = findLabelByText('Manually');
+      if (label) {
+        console.log('✅ Clicking Manually option');
+        label.click();
+        resolve(label);
+        return;
       }
-      
+
       if (Date.now() - startTime > 5000) {
         reject(new Error('Manually option not found'));
         return;
@@ -102,6 +135,90 @@ async function clickManuallyOption() {
     
     check();
   });
+}
+
+async function clickAutomaticallyOption() {
+  return new Promise((resolve, reject) => {
+    const startTime = Date.now();
+
+    const check = () => {
+      const label = findLabelByText('Automatically');
+      if (label) {
+        console.log('✅ Clicking Automatically option');
+        label.click();
+        resolve(label);
+        return;
+      }
+
+      if (Date.now() - startTime > 5000) {
+        reject(new Error('Automatically option not found'));
+        return;
+      }
+
+      setTimeout(check, 100);
+    };
+
+    check();
+  });
+}
+
+async function selectMostRecentAutomaticTrigger() {
+  return new Promise((resolve, reject) => {
+    const startTime = Date.now();
+    const headerText = normalizeText('With a recently used trigger');
+
+    const check = () => {
+      const containers = document.querySelectorAll('div, section');
+      for (const container of containers) {
+        if (!isVisible(container)) {
+          continue;
+        }
+        const text = normalizeText(container.textContent);
+        if (!text.includes(headerText)) {
+          continue;
+        }
+
+        const candidates = container.querySelectorAll('label, [role="radio"], button, [role="option"], [role="listitem"]');
+        for (const candidate of candidates) {
+          if (!isVisible(candidate)) {
+            continue;
+          }
+
+          const candidateText = normalizeText(candidate.textContent);
+          if (!candidateText || candidateText === headerText) {
+            continue;
+          }
+
+          console.log(`✅ Selecting recent trigger option: ${candidate.textContent.trim()}`);
+          candidate.click();
+          resolve(candidate);
+          return;
+        }
+      }
+
+      if (Date.now() - startTime > 7000) {
+        reject(new Error('No recent trigger available'));
+        return;
+      }
+
+      setTimeout(check, 100);
+    };
+
+    check();
+  });
+}
+
+async function selectTestMode() {
+  try {
+    await clickAutomaticallyOption();
+    await selectMostRecentAutomaticTrigger();
+    console.log('✅ Using automatic trigger');
+    return 'automatic';
+  } catch (error) {
+    console.warn(`⚠️ Automatic trigger unavailable (${error.message}), falling back to manual`);
+    await clickManuallyOption();
+    return 'manual';
+  }
 }
 
 // Main automation sequence - corrected button detection
@@ -115,14 +232,15 @@ async function clickManuallyOption() {
     testButton.click();
     console.log('✅ Clicked Test button');
     
-    // Step 2: Click Manually option
-    console.log('Step 2: Clicking Manually option...');
-    await clickManuallyOption();
+    // Step 2: Prefer Automatically with recent trigger, fallback to Manually
+    console.log('Step 2: Selecting test mode (Automatically preferred)...');
+    const mode = await selectTestMode();
+    console.log(`🚀 Selected test mode -> ${mode}`);
     
     // Step 3: Wait for the NEW button that appears in the footer
     console.log('Step 3: Waiting for new footer button...');
     
-    // After clicking Manually, wait for the new button in the footer panel
+    // After selecting the test mode, wait for the new button in the footer panel
     let clickedButton = null;
     
     // Use faster detection with shorter timeout for both buttons
